@@ -28,8 +28,8 @@ class RegisterRequest extends FormRequest
             'email' => 'required|unique:doctors|email',
             'password' => 'required|min:5',
             'phone' => 'required|max:10',
-            'profile_image' => 'required|image|max:2048',
-            'certificate_image' => 'required|image|max:2048',
+            // 'profile_image' => 'required|image',
+            // 'certificate_image' => 'required|image',
         ];
     }
 }

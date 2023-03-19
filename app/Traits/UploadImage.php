@@ -11,16 +11,15 @@ trait UploadImage{
 
     public function profileimage(Request $request,$folder)
     {
+          $valid=  $request->validate([
+            'image'=>'image'
 
-        $image = $request->profile_image->getClientOriginalName();
-        $path = $request->profile_image->storeAS($folder, $image, 'public');
+        ]);
+        $img=$valid['image'];
+        $img_name=time().".".$img->getClientOriginalExtension();
+        $path=$img->storeAS($folder, $img_name, 'public');
         return $path;
         
     }
-    public function certimage(Request $request,$folder)
-    {
-        $certimage = $request->certificate_image->getClientOriginalName();
-        $path = $request->certificate_image->storeAS($folder, $certimage, 'public');
-        return $path;
-    }
+    
 }

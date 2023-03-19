@@ -14,7 +14,7 @@ class AddCorsHeaders
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle($request, Closure $next)
+   public function handle($request, Closure $next)
 {
     $response = $next($request);
     $response->headers->set('Access-Control-Allow-Origin', '*');
@@ -23,4 +23,5 @@ class AddCorsHeaders
 
     return $response;
 }
+
 }

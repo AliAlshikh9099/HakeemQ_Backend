@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Mail\AppointmentMail;
+use App\Mail\DoctorMail;
+use App\Models\appointment;
+use App\Models\Doctor;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Doctor::created(function($doctor){
+            Mail::to($doctor->email)->send(new DoctorMail($doctor));
+        });
+        // appointment::created(function($appoint){
+        //     Mail::to($appoint->email)->send(new AppointmentMail($appoint));
+        // });
     }
 }

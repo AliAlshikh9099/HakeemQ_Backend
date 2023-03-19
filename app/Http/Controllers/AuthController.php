@@ -2,44 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DoctorMail;
+use App\Traits\ApiResponse;
 use App\Traits\UploadImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Models\Doctor;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    use UploadImage;
+    
     //! *************Register section***********************
+    
+    use ApiResponse;
     public function register(RegisterRequest $req)
     {
-
-
-        $profile_path = $this->profileimage($req, 'profile');
-        $certif_path = $this->certimage($req, 'certificate');
+    
         $doctor = Doctor::create([
-            'name' => $req->name,
+            'name' =>'Dr.'.$req->name,
             'email' => $req->email,
             'password' => Hash::make($req->password),
             'phone' => $req->phone,
-            'profile_image' => $profile_path,
-            'certificate_image' => $certif_path,
+            'spz'=>$req->spz,
         ]);
-
-
-
         $token = $doctor->createToken('my_token')->plainTextToken;
-        $response = [
-            'doctor ' => $doctor,
-            'token ' => $token,
+        
+        return  $this->authresponse($doctor,'Welcome Doctor,please check your email',Response::HTTP_CREATED,$token);
 
-        ];
-
-        return response($response, 201);
 
     }
 
@@ -67,8 +62,6 @@ class AuthController extends Controller
         } else {
             return response()->json([
                 'message' => 'Email or Password not correct',
-                'status' => false,
-
             ]);
             
         }
@@ -88,6 +81,30 @@ class AuthController extends Controller
         ]);
     }
 
+    public function upload(Request $request)
+    {
+       $path=$this->profileimage($request,'profile');
+        
+        DB::table('images')->insert([
+            'image'=>$path,
+            
+        ]);
+        
+        return response([
+            'request'=>$request->headers->all(),
+            'msg'=>'uploading Done',
+            'path'=>$path,
+        ]
+        );
+    }
 
+
+    public function send()
+    {
+        $doctor=Doctor::find(2);
+        Mail::to($doctor->email)->send(new DoctorMail($doctor));
+        return response('Done Sending Email');
+    }
+   
 
 }

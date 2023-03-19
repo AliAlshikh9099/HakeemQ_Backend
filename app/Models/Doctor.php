@@ -12,9 +12,15 @@ class Doctor extends Model implements \Illuminate\Contracts\Auth\Authenticatable
 {
     use HasFactory,HasApiTokens;
     use Authenticatable;
-    protected $guarded = [''];
+    protected $guarded = ['profile_image'];
     
     protected $hidden = [
         'password',
     ];
+
+
+public function appointments()
+{
+return $this->hasMany(appointment::class);
+}
 }

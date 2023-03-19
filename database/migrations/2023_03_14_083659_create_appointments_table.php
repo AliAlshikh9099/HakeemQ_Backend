@@ -13,13 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('doctors', function (Blueprint $table) {
+        Schema::create('appointments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('password');
             $table->string('phone');
-            $table->enum('spz',['Dentist', 'Orthopedist', 'Pediatrician', 'Plastci', 'Urologist', 'Ophthalmologist']);
+            $table->integer('age');
+            $table->enum('gender',['male','female']);
+            $table->longText('description');
+            $table->date('appointment_date');
+            $table->time('appointment_time');
+            $table->foreignId('doctor_id')->constrained('doctors');
             $table->timestamps();
         });
     }
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('doctors');
+        Schema::dropIfExists('appointments');
     }
 };
