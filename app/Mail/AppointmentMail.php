@@ -34,7 +34,7 @@ class AppointmentMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Appointment Mail',
+            subject: 'Appointment Mail For Doctor',
         );
     }
 
@@ -49,9 +49,10 @@ class AppointmentMail extends Mailable
             markdown: 'emails.appointment',
             with:[
             
-                'user_name'=> $this->appoint->name,
+               'user_name'=> $this->appoint->name,
                 'appoint_date'=>$this->appoint->appoint_date,
                 'appoint_time'=>$this->appoint->appoint_time,
+                'doctor_name'=>$this->appoint->doctor->name,
 
 
             ]

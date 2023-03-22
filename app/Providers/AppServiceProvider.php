@@ -31,8 +31,10 @@ class AppServiceProvider extends ServiceProvider
         Doctor::created(function($doctor){
             Mail::to($doctor->email)->send(new DoctorMail($doctor));
         });
-        // appointment::created(function($appoint){
-        //     Mail::to($appoint->email)->send(new AppointmentMail($appoint));
-        // });
+        appointment::created(function($appoint){
+
+             $appoint = appointment::find($appoint->id);
+            Mail::to($appoint->doctor->email)->send(new AppointmentMail($appoint));
+        });
     }
 }
